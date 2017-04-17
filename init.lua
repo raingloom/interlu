@@ -32,7 +32,7 @@ end
 
 local function runfun( fun )
 	local pRes = table_pack( pcall( fun ))
-	if pRes[ 1 ] then
+	if pRes[ 1 ] and pRes.n > 1 then
 		print( table_unpack( pRes, 2, pRes.n ))
 	else
 		writeerr( pRes[ 2 ] )
