@@ -45,7 +45,7 @@ local buf = {}
 
 function M.interact()
 	while true do
-		local line = readline( level1 and (_PROMPT or '> ') or (_PROMP2 or '>> '))
+		local line = readline( level1 and (_PROMPT or '> ') or (_PROMPT2 or '>> '))
 		if line then
 			if level1 then
 				local fun, err
