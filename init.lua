@@ -18,6 +18,8 @@ end
 
 local function is_incomplete( err )
 	--[[U G L Y    H A C K]]--
+	--[[this may break with alternative Lua implementations, since it relies on a very specific error string format
+	if it breaks with what you use, open a new issue in the [github repository](https://github.com/raingloom/interlu/) detailing your setup]]
 	return not not err:match( 'expected.-near %<eof%>%s*$' )
 end
 
