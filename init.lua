@@ -16,33 +16,33 @@ do
 	end
 end
 
-local function isIncomplete( err )
+local function is_incomplete( err )
 	--[[U G L Y    H A C K]]--
-	return not not err:match'expected.-near %<eof%>%s*$'
+	return not not err:match( 'expected.-near %<eof%>%s*$' )
 end
 
-local function writeerr( err )
+local function write_error( err )
 	local ok, str = pcall( tostring, err )
 	if not ok then
 		str = 'error object is a (' .. type( err ) .. ')'
 	end
 	io_stderr:write( str )
-	io_stderr:write'\n'
+	io_stderr:write( '\n' )
 end
 
-local function runfun( fun )
-	local pRes = table_pack( pcall( fun ))
-	if pRes[ 1 ] then
-		if pRes.n > 1 then
-			print( table_unpack( pRes, 2, pRes.n ))
+local function call_func( fun )
+	local res = table_pack( pcall( fun ))
+	if res[ 1 ] then
+		if res.n > 1 then
+			print( table_unpack( res, 2, res.n ))
 		end
 	else
-		writeerr( pRes[ 2 ] )
+		write_error( res[ 2 ] )
 	end
 end
 
 local level1 = true
-local canreturn = false
+local can_return = false
 local buf = {}
 
 function M.interact()
@@ -53,20 +53,20 @@ function M.interact()
 				local fun, err
 				fun, err = loadstring( 'return ' .. line )
 				if err then
-					canreturn = false
+					can_return = false
 					fun, err = loadstring( line )
 				else
-					canreturn = true
+					can_return = true
 				end
 				if fun then
-					runfun( fun )
+					call_func( fun )
 				else
 					--is it just incomplete syntax or an unrecoverable syntax error?
-					if isIncomplete( err ) then
+					if is_incomplete( err ) then
 						level1 = false
 						buf = { line }
 					else
-						writeerr( err )
+						write_error( err )
 					end
 				end
 			else
@@ -75,21 +75,21 @@ function M.interact()
 				local fun, err
 				fun, err = loadstring( 'return ' .. src )
 				if err then
-					canreturn = false
+					can_return = false
 					fun, err = loadstring( src )
 				else
-					canreturn = true
+					can_return = true
 				end
 				if fun then
-					runfun( fun )
+					call_func( fun )
 					level1 = true
 					buf = nil
 				else
-					if isIncomplete( err ) then
+					if is_incomplete( err ) then
 						--keep reading
 					else
 						level1 = true
-						writeerr( err )
+						write_error( err )
 					end
 				end
 			end
