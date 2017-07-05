@@ -10,7 +10,7 @@ do
 		readline = libreadline.readline
 	else
 		function readline( prompt )
-			io_write( promp )
+			io_write( prompt )
 			return io_read()
 		end
 	end
