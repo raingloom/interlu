@@ -3,13 +3,12 @@ local M = {}
 local pcall, tostring, type, require, loadstring, io_stderr, io_write, io_read, table_insert, table_concat, table_pack, table_unpack, print =
        pcall, tostring, type, require, loadstring, io.stderr, io.write, io.read, table.insert, table.concat, table.pack, table.unpack, print
 
-local readline
 do
 	local ok, libreadline = pcall( require, 'readline' )
 	if ok then
-		readline = libreadline.readline
+		M.readline = libreadline.readline
 	else
-		function readline( prompt )
+		function M.readline( prompt )
 			io_write( prompt )
 			return io_read()
 		end
@@ -23,7 +22,7 @@ local function is_incomplete( err )
 	return not not err:match( 'expected.-near %<eof%>%s*$' )
 end
 
-local function write_error( err )
+function M.write_error( err )
 	local ok, str = pcall( tostring, err )
 	if not ok then
 		str = 'error object is a (' .. type( err ) .. ')'
@@ -32,14 +31,14 @@ local function write_error( err )
 	io_stderr:write( '\n' )
 end
 
-local function call_func( fun )
+function M.call_func( fun )
 	local res = table_pack( pcall( fun ))
 	if res[ 1 ] then
 		if res.n > 1 then
 			print( table_unpack( res, 2, res.n ))
 		end
 	else
-		write_error( res[ 2 ] )
+		M.write_error( res[ 2 ] )
 	end
 end
 
@@ -48,7 +47,7 @@ local buf = {}
 
 function M.interact()
 	while true do
-		local line = readline( level1 and (_PROMPT or '> ') or (_PROMPT2 or '>> '))
+		local line = M.readline( level1 and (_PROMPT or '> ') or (_PROMPT2 or '>> '))
 		if line then
 			if level1 then
 				local fun, err
@@ -64,7 +63,7 @@ function M.interact()
 						level1 = false
 						buf = { line }
 					else
-						write_error( err )
+						M.write_error( err )
 					end
 				end
 			else
@@ -84,7 +83,7 @@ function M.interact()
 						--keep reading
 					else
 						level1 = true
-						write_error( err )
+						M.write_error( err )
 					end
 				end
 			end
