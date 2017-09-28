@@ -44,7 +44,6 @@ local function call_func( fun )
 end
 
 local level1 = true
-local can_return = false
 local buf = {}
 
 function M.interact()
@@ -55,10 +54,7 @@ function M.interact()
 				local fun, err
 				fun, err = loadstring( 'return ' .. line )
 				if err then
-					can_return = false
 					fun, err = loadstring( line )
-				else
-					can_return = true
 				end
 				if fun then
 					call_func( fun )
@@ -77,10 +73,7 @@ function M.interact()
 				local fun, err
 				fun, err = loadstring( 'return ' .. src )
 				if err then
-					can_return = false
 					fun, err = loadstring( src )
-				else
-					can_return = true
 				end
 				if fun then
 					call_func( fun )
