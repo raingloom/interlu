@@ -56,7 +56,7 @@ function M.interact()
 					fun, err = loadstring( line )
 				end
 				if fun then
-					call_func( fun )
+					M.call_func( fun )
 				else
 					--is it just incomplete syntax or an unrecoverable syntax error?
 					if is_incomplete( err ) then
@@ -75,7 +75,7 @@ function M.interact()
 					fun, err = loadstring( src )
 				end
 				if fun then
-					call_func( fun )
+					M.call_func( fun )
 					level1 = true
 					buf = nil
 				else
